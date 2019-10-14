@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>我的页面</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			border: 0;
+			padding: 0;
+		}
+		body{
+			text-align: center;
+		}
+		#canvas{
+			margin: 0 auto;
+			width: 1024px;
+			height: 668px;
+		}
+	</style>
+	<script src="digit.js">
+	</script>
+</head>
+<body>
+	<canvas id="canvas">
+	</canvas>
+	<script>
+		const WINDOW_WIDTH = 1024
+		const WINDOW_HEIGHT = 768
+		const RADIUS = 9
+		const canvas = document.getElementById("canvas")
+		const context = canvas.getContext("2d")
+		canvas.width = WINDOW_WIDTH
+		canvas.height = WINDOW_HEIGHT
+		var date = new Date()
+		var ball = { x:512, y:100, r:9, g:2, vx:-4, vy:0, color:"#005588" }
+		var balls = [ ]
+		const colors = [ "#33E5B5", "#0099CC", "#AA66CC", "#9933CC", "#99CC00", "#669900", "#FFBB33", "#FF8800", "#FF4444", "#CC0000" ]
+		function addBalls(x, y, num){
+
+		}
+		function renderDigit(x, y, num){
+			context.fillStyle = "rgb(0, 102, 153)"
+			for (var i = 0;i < digit[num].length;i ++){
+				for (var j = 0;j < digit[num][i].length; j ++){
+					if (digit[num][i][j] == 1) {
+						context.beginPath()
+						context.arc(x+j*2*(RADIUS+1)+(RADIUS+1),y+i*2*(RADIUS+1)+(RADIUS+1), RADIUS, 0, 2*Math.PI)
+						context.closePath()
+						context.fill()
+					}
+				}
+			}
+		}
+		function render(){
+			context.clearRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+
+			var nextdate = new Date()
+
+			var nexthour = nextdate.getHours()
+			var nextminute = nextdate.getMinutes()
+			var nextsecond = nextdate.getSeconds()
+
+			renderDigit(0, 0, parseInt(nexthour/10))
+			renderDigit(140, 0, nexthour%10)
+
+			renderDigit(280, 0, 10)
+
+			renderDigit(360, 0, parseInt(nextminute/10))
+			renderDigit(500, 0, nextminute%10)
+
+			renderDigit(640, 0, 10)
+
+			renderDigit(720, 0, parseInt(nextsecond/10))
+			renderDigit(860, 0, nextsecond%10)
+
+			if (date !== nextdate){
+				context.fillStyle = ball.color
+				context.beginPath()
+				context.arc(ball.x, ball.y, ball.r, 0, 2*Math.PI)
+				context.closePath()
+				context.fill()
+
+			}
+
+			date = nextdate
+		}
+		function update(){
+			ball.x += ball.vx
+			ball.y += ball.vy
+			ball.vy += ball.g
+
+			if (ball.y >= 768 - ball.r) {
+				ball.y = 768 - ball.r
+				ball.vy = - ball.vy * 0.6
+			}
+		}
+		render()
+		setInterval(()=>{
+			render()
+			update()
+		}, 50)
+	</script>
+</body>
+</html>
