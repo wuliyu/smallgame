@@ -53,8 +53,8 @@
 				}
 			}
 		}
-		function renderDigit(x, y, num){
-			context.fillStyle = "rgb(0, 102, 153)"
+		function renderDigit(x, y, num, color){
+			context.fillStyle = color
 			for (var i = 0;i < digit[num].length;i ++){
 				for (var j = 0;j < digit[num][i].length; j ++){
 					if (digit[num][i][j] == 1) {
@@ -82,18 +82,18 @@
 			e = parseInt(nextsecond/10)
 			f = nextsecond%10
 
-			renderDigit(0, 0, a)
-			renderDigit(140, 0, b)
+			renderDigit(0, 0, a, "blue")
+			renderDigit(140, 0, b, "blue")
 
-			renderDigit(280, 0, 10)
+			renderDigit(280, 0, 10, "purple")
 
-			renderDigit(360, 0, c)
-			renderDigit(500, 0, d)
+			renderDigit(360, 0, c, "yellow")
+			renderDigit(500, 0, d, "yellow")
 
-			renderDigit(640, 0, 10)
+			renderDigit(640, 0, 10, "purple")
 
-			renderDigit(720, 0, e)
-			renderDigit(860, 0, f)
+			renderDigit(720, 0, e, "orange")
+			renderDigit(860, 0, f, "orange")
 
 			var hour = date.getHours()
 			var minute = date.getMinutes()
@@ -137,16 +137,6 @@
 
 			date = nextdate
 		}
-		function update(){
-			ball.x += ball.vx
-			ball.y += ball.vy
-			ball.vy += ball.g
-
-			if (ball.y >= 768 - ball.r) {
-				ball.y = 768 - ball.r
-				ball.vy = -ball.vy * 0.6
-			}
-		}
 		function updateBalls(){
 			for(var i=0;i<balls.length;i++){
 				var ball = balls[i]
@@ -157,7 +147,7 @@
 
 				if (ball.y >= 768 - RADIUS) {
 					ball.y = 768 - RADIUS
-					ball.vy = -ball.vy * 0.6
+					ball.vy = - ball.vy * 0.75
 				}
 			}
 		}
