@@ -37,7 +37,21 @@
 		var balls = [ ]
 		const colors = [ "#33E5B5", "#0099CC", "#AA66CC", "#9933CC", "#99CC00", "#669900", "#FFBB33", "#FF8800", "#FF4444", "#CC0000" ]
 		function addBalls(x, y, num){
-
+			for(var i=0;i<digit[num].length;i++){
+				for(var j=0;j<digit[num][i].length;j++){
+					if (digit[num][i][j] == 1){
+						var aBall = {
+							x:x+j*2*(RADIUS+1)+(RADIUS+1),
+							y:y+i*2*(RADIUS+1)+(RADIUS+1),
+							g:1.5+Math.random(),
+							vx:Math.pow(-1, Math.ceil(Math.random()*1000))*4,
+							vy:-5,
+							color:colors[Math.floor(Math.random()*colors.length)]					
+						}
+						balls.push(aBall)
+					}
+				}
+			}
 		}
 		function renderDigit(x, y, num){
 			context.fillStyle = "rgb(0, 102, 153)"
@@ -61,26 +75,64 @@
 			var nextminute = nextdate.getMinutes()
 			var nextsecond = nextdate.getSeconds()
 
-			renderDigit(0, 0, parseInt(nexthour/10))
-			renderDigit(140, 0, nexthour%10)
+			a = parseInt(nexthour/10)
+			b = nexthour%10
+			c = parseInt(nextminute/10)
+			d = nextminute%10
+			e = parseInt(nextsecond/10)
+			f = nextsecond%10
+
+			renderDigit(0, 0, a)
+			renderDigit(140, 0, b)
 
 			renderDigit(280, 0, 10)
 
-			renderDigit(360, 0, parseInt(nextminute/10))
-			renderDigit(500, 0, nextminute%10)
+			renderDigit(360, 0, c)
+			renderDigit(500, 0, d)
 
 			renderDigit(640, 0, 10)
 
-			renderDigit(720, 0, parseInt(nextsecond/10))
-			renderDigit(860, 0, nextsecond%10)
+			renderDigit(720, 0, e)
+			renderDigit(860, 0, f)
+
+			var hour = date.getHours()
+			var minute = date.getMinutes()
+			var second = date.getSeconds()
+			a1 = parseInt(hour/10)
+			b1 = hour%10
+			c1 = parseInt(minute/10)
+			d1 = minute%10
+			e1 = parseInt(second/10)
+			f1 = second%10
 
 			if (date !== nextdate){
-				context.fillStyle = ball.color
-				context.beginPath()
-				context.arc(ball.x, ball.y, ball.r, 0, 2*Math.PI)
-				context.closePath()
-				context.fill()
+				if (a != a1){
+					addBalls(0, 0, a)
+				}
+				if (b != b1){
+					addBalls(140, 0, b)
+				}
+				if (c != c1){
+					addBalls(360, 0, c)
+				}
+				if (d != d1){
+					addBalls(500, 0, d)
+				}
+				if (e != e1){
+					addBalls(720, 0, e)
+				}
+				if (f != f1){
+					addBalls(860, 0, f)
+				}
 
+				for(var i=0;i<balls.length;i++){
+					var ball = balls[i]
+					context.fillStyle = ball.color
+					context.beginPath()
+					context.arc(ball.x, ball.y, RADIUS, 0, 2*Math.PI)
+					context.closePath()
+					context.fill()
+				}
 			}
 
 			date = nextdate
@@ -92,13 +144,27 @@
 
 			if (ball.y >= 768 - ball.r) {
 				ball.y = 768 - ball.r
-				ball.vy = - ball.vy * 0.6
+				ball.vy = -ball.vy * 0.6
+			}
+		}
+		function updateBalls(){
+			for(var i=0;i<balls.length;i++){
+				var ball = balls[i]
+
+				ball.x += ball.vx
+				ball.y += ball.vy
+				ball.vy += ball.g
+
+				if (ball.y >= 768 - RADIUS) {
+					ball.y = 768 - RADIUS
+					ball.vy = -ball.vy * 0.6
+				}
 			}
 		}
 		render()
 		setInterval(()=>{
 			render()
-			update()
+			updateBalls()
 		}, 50)
 	</script>
 </body>
